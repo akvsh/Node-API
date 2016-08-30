@@ -1,12 +1,17 @@
 // load the express package and create our app
 var express = require('express');
 var app = express();
+
 var bodyParser = require('body-parser');
+
 var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/test'); // connect to our database
 var Schema = mongoose.Schema;
+var User = require('./app/models/user');
+
 var morgan = require('morgan');
 var port = process.env.PORT || 8080;
-var User = require('./app/models/user');
+
 
 app.use(bodyParser.urlencoded({
     extended: true
@@ -108,7 +113,46 @@ apiRouter.route("/users/:user_id")
 })
 
 
-// more routes for our API will happen here 47
+//update the user with this id
+//(accessed at PUT http://localhost:8080/api/users/:user_id)
+.put(function (req, res) {
+    User.findById(req.params.user_id, function (err, user) {
+        if (err) res.send(err);
+
+        // update the users info only if its new
+        if (req.body.name) user.name = req.body.name;
+        if (req.body.username) user.username = req.body.username;
+        if (req.body.password) user.password = req.body.password;
+
+        //save the user
+        user.save(function (err) {
+            if (err) res.send(err);
+
+            //return a message
+            res.json({
+                message: "User updated!"
+            });
+        });
+
+    });
+})
+
+//delete user with this id
+//(accessed at DELETE http://localhost:8080/api/users/:user_id)
+.delete(function (req, res) {
+    User.remove({
+        _id: req.params.user_id
+    }, function (err, user) {
+        if (err) return res.send(err);
+
+        res.json({
+            message: 'Successfully deleted'
+        });
+    });
+});
+
+
+// more routes for our API will happen here
 // REGISTER OUR ROUTES -------------------------------
 // all of our routes will be prefixed with /api
 app.use('/api', apiRouter);
@@ -117,5 +161,3 @@ app.use('/api', apiRouter);
 // ===============================
 app.listen(port);
 console.log('Magic happens on port ' + port);
-
-mongoose.connect('mongodb://localhost:27017/test'); // connect to our database
