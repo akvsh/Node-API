@@ -12,6 +12,9 @@ var User = require('./app/models/user');
 var morgan = require('morgan');
 var port = process.env.PORT || 8080;
 
+var jwt = require('jsonwebtoken');
+//secret string not really though since github
+var superSecret = 'ilovescotchscotchyscotchscotch';
 
 app.use(bodyParser.urlencoded({
     extended: true
