@@ -8,3 +8,4 @@
 - bcrypt-nodejs
 - Morgan
 - Body-Parser
+- JWT (JSON Web Tokens)
