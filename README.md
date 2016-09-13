@@ -1,5 +1,5 @@
 # MEAN-Practice
-Basic MEAN App to get familiar with/learn the stack
+Basic API using MEAN to get familiar with/learn the stack
 
 *Libraries/Tech used (for personal reference later):*
 - MongoDB
